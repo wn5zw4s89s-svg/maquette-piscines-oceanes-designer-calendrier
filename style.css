@@ -1,0 +1,173 @@
+/* Piscines Océanes — piste C « Calendrier du bassin » — Le Designer, 13/11/2026.
+   Jetons puis composants. Polices Bitter et Public Sans, SIL OFL 1.1 (fonts/OFL-*.txt). */
+@font-face{font-family:"Bitter";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/bitter-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"Public Sans";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/public-sans-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Public Sans";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/public-sans-latin-600-normal.woff2") format("woff2")}
+
+:root{
+  /* Couleur — dominante « encre d'almanach » (ardoise), papier blanc, trois teintes de saison
+     réservées au ruban, accent « soleil » réservé au seul bouton d'appel */
+  --encre-950:#141D21; --encre-900:#1E2A30; --encre-800:#2C3A41; --encre-700:#3D4C53; --encre-600:#56646B;
+  --encre-500:#6E7B81; --encre-400:#919CA1; --encre-300:#B8C0C4; --encre-200:#D8DEE0; --encre-100:#ECF0F1; --encre-50:#F5F7F7;
+  --saison-debut:#DDEEE6;   /* mise en service : eau claire du printemps */
+  --saison-pleine:#CFE6EC;  /* la saison : eau de baignade */
+  --saison-fin:#E3E6EC;     /* hivernage : bâche, ciel d'hiver */
+  --soleil-500:#F4BE2A; --soleil-600:#E0A800;
+  --c-fond:#FFFFFF; --c-surface:var(--encre-50); --c-texte:var(--encre-900); --c-texte-2:var(--encre-600);
+  --c-bordure:var(--encre-200); --c-accent:var(--soleil-500); --c-accent-actif:var(--soleil-600); --c-focus:var(--encre-950);
+  --c-succes:#1E6B3A; --c-erreur:#B3261E;
+  /* Typographie */
+  --f-titre:"Bitter",Georgia,serif; --f-texte:"Public Sans",Arial,sans-serif;
+  --t-12:12px;--t-14:14px;--t-16:16px;--t-18:18px;--t-20:20px;--t-24:24px;--t-30:30px;--t-36:36px;--t-48:48px;--t-affiche:56px;
+  --lh-texte:1.55; --lh-titre:1.15;
+  /* Espacement */
+  --s-4:4px;--s-8:8px;--s-12:12px;--s-16:16px;--s-24:24px;--s-32:32px;--s-48:48px;--s-64:64px;--s-96:96px;--s-128:128px;
+  --largeur:1248px;
+  /* Rayon unique 8 px (bloc d'éphéméride), aucune ombre */
+  --r:8px; --ombre:none;
+  --m:160ms;
+}
+@media (prefers-reduced-motion:reduce){:root{--m:0ms}}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--c-fond);color:var(--c-texte);font:400 var(--t-16)/var(--lh-texte) var(--f-texte)}
+img{display:block;max-width:100%;height:auto;border-radius:var(--r)}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+h1,h2,h3{font-family:var(--f-titre);font-weight:600;line-height:var(--lh-titre)}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--c-focus);outline-offset:3px}
+.nw{white-space:nowrap}
+.chiffres{font-variant-numeric:tabular-nums}
+.cadre{max-width:var(--largeur);margin:0 auto;padding:0 var(--s-24)}
+.saut{position:absolute;left:var(--s-16);top:-64px;background:var(--c-texte);color:#fff;padding:var(--s-12) var(--s-16);z-index:10}
+.saut:focus{top:var(--s-16)}
+.maquette{font-size:var(--t-12);color:var(--c-texte-2);border-bottom:1px solid var(--c-bordure)}
+.maquette p{padding-top:var(--s-8);padding-bottom:var(--s-8)}
+
+/* En-tête */
+.entete{position:relative}
+.entete .cadre{display:flex;align-items:center;justify-content:space-between;min-height:72px;gap:var(--s-24)}
+.logo{display:inline-flex;align-items:center;min-height:48px}
+.logo img{height:32px;width:auto;border-radius:0}
+.nav{display:none}
+.menu summary{list-style:none;cursor:pointer;min-height:48px;display:flex;align-items:center;padding:0 var(--s-16);border-radius:var(--r);background:var(--c-surface);font-weight:600}
+.menu summary::-webkit-details-marker{display:none}
+.menu[open] summary{background:var(--c-texte);color:#fff}
+.menu ul{position:absolute;left:0;right:0;background:#fff;border-bottom:1px solid var(--c-bordure);padding:0 var(--s-24) var(--s-16);z-index:5}
+.menu li a{display:flex;align-items:center;min-height:48px;border-bottom:1px solid var(--c-bordure);text-decoration:none}
+
+/* Bouton : l'unique action, jaune soleil */
+.action{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 var(--s-24);background:var(--c-accent);color:var(--encre-950);border:1px solid var(--encre-900);border-radius:var(--r);font-weight:600;font-size:var(--t-18);text-decoration:none;transition:background-color var(--m)}
+.action:hover{background:var(--c-accent-actif)}
+.action:active{transform:translateY(1px)}
+
+/* Héros */
+.heros{padding:var(--s-32) 0 var(--s-64)}
+.heros .cadre{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s-48)}
+.heros h1{font-size:var(--t-30);letter-spacing:-0.01em;max-width:18ch}
+.chapo{margin-top:var(--s-16);font-size:var(--t-18);max-width:48ch}
+.preuve{margin-top:var(--s-16)}
+.preuve span{color:var(--c-texte-2);font-size:var(--t-14)}
+.heros .action{margin-top:var(--s-24);width:100%}
+.horaire{margin-top:var(--s-12);font-size:var(--t-14);color:var(--c-texte-2)}
+
+/* Le ruban : l'année d'une piscine, sans date inventée */
+.ruban-titre{font-size:var(--t-14);color:var(--c-texte-2);margin-bottom:var(--s-12)}
+.ruban{display:grid;gap:2px}
+.ruban li{padding:var(--s-16) var(--s-24);display:grid;gap:var(--s-4)}
+.ruban li:first-child{border-radius:var(--r) var(--r) 0 0}
+.ruban .moment{font-size:var(--t-14);color:var(--encre-700)}
+.ruban .geste{font-family:var(--f-titre);font-weight:600;font-size:var(--t-24);line-height:1.2}
+.r-debut{background:var(--saison-debut)}
+.r-pleine{background:var(--saison-pleine)}
+.r-fin{background:var(--saison-fin)}
+.annee{border:1px solid var(--encre-900);border-top:0;border-radius:0 0 var(--r) var(--r);padding:var(--s-12) var(--s-24);font-size:var(--t-16)}
+.annee strong{font-weight:600}
+/* fil des saisons : répétition fine du ruban (séparateurs et pied) */
+.fil{height:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px}
+.fil span:nth-child(1){background:var(--saison-debut)}
+.fil span:nth-child(2){background:var(--saison-pleine)}
+.fil span:nth-child(3){background:var(--saison-fin)}
+
+/* Sections */
+section{padding:var(--s-64) 0}
+h2{font-size:var(--t-30);letter-spacing:-0.005em;max-width:22ch}
+.texte p{max-width:60ch}
+.texte p+p{margin-top:var(--s-12)}
+.lien{font-weight:600;display:inline-flex;align-items:center;min-height:44px;margin-top:var(--s-8)}
+figcaption{margin-top:var(--s-8);font-size:var(--t-12);color:var(--c-texte-2)}
+.entretien .cadre{display:grid;gap:var(--s-24)}
+.entretien h2{margin-bottom:var(--s-16)}
+.sav{background:var(--c-surface)}
+.sav h2{font-size:var(--t-24);max-width:28ch}
+.sav p{margin-top:var(--s-12);max-width:56ch}
+.magasin h2{margin-bottom:var(--s-8)}
+.magasin .sous{color:var(--c-texte-2);max-width:56ch}
+.photos2{display:grid;gap:var(--s-16);margin-top:var(--s-32)}
+.offre{display:grid;gap:var(--s-24);margin-top:var(--s-32)}
+.offre li{border-top:1px solid var(--encre-900);padding-top:var(--s-12)}
+.offre h3{font-size:var(--t-20);margin-bottom:var(--s-4)}
+.construire .cadre{display:grid;gap:var(--s-32)}
+.construire .photos2 img{aspect-ratio:4/3;object-fit:cover;width:100%}
+.construire h3{font-size:var(--t-20);margin:var(--s-24) 0 var(--s-8)}
+.avis{border-top:1px solid var(--c-bordure)}
+.avis .note{font-size:var(--t-30);max-width:30ch}
+.avis .note span{display:block;font-family:var(--f-texte);font-weight:400;font-size:var(--t-18);line-height:1.5;color:var(--c-texte-2);margin-top:var(--s-8)}
+.avis .src{margin-top:var(--s-16);font-size:var(--t-14);color:var(--c-texte-2)}
+
+/* Contact */
+.contact{background:var(--c-surface)}
+.contact .cadre{display:grid;gap:var(--s-32)}
+.contact .action{width:100%;margin-top:var(--s-24)}
+.contact .ecrit{margin-top:var(--s-16)}
+.contact .zone{margin-top:var(--s-16);max-width:48ch}
+.horaires h3,.adresse h3{font-size:var(--t-18);margin-bottom:var(--s-8)}
+.horaires dl{display:grid;grid-template-columns:auto 1fr;gap:var(--s-4) var(--s-24)}
+.horaires dt{color:var(--c-texte-2)}
+.adresse{font-style:normal;margin-top:var(--s-24)}
+.adresse a{display:inline-flex;align-items:center;min-height:44px}
+.paiement{margin-top:var(--s-16);font-size:var(--t-14);color:var(--c-texte-2)}
+
+/* Pied */
+.pied{padding:0 0 var(--s-128);font-size:var(--t-14);color:var(--c-texte-2)}
+.pied .cadre{display:grid;gap:var(--s-12);padding-top:var(--s-32)}
+.pied ul{display:flex;flex-wrap:wrap;gap:0 var(--s-24)}
+.pied li a,.pied li span{display:inline-flex;align-items:center;min-height:44px}
+
+/* Barre d'appel (téléphone) */
+.barre{position:fixed;left:0;right:0;bottom:0;padding:var(--s-8) var(--s-16) calc(var(--s-8) + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--c-bordure);transition:transform var(--m);z-index:4}
+.barre .action{width:100%}
+.barre.cachee{transform:translateY(110%)}
+
+@media (min-width:720px){
+  .heros h1{font-size:var(--t-48)}
+  .heros .action,.contact .action{width:auto}
+  .photos2{grid-template-columns:1fr 1fr}
+  .offre{grid-template-columns:1fr 1fr 1fr}
+}
+@media (min-width:1080px){
+  .nav{display:flex;align-items:center;gap:var(--s-24)}
+  .nav a{text-decoration:none;min-height:48px;display:inline-flex;align-items:center}
+  .nav a:hover{text-decoration:underline}
+  .nav .tel{font-weight:600;padding-left:var(--s-24);border-left:1px solid var(--c-bordure)}
+  .menu{display:none}
+  .logo img{height:36px}
+  .heros{padding:var(--s-64) 0 var(--s-96)}
+  .heros .cadre{grid-template-columns:7fr 5fr;gap:var(--s-96);align-items:center}
+  .heros h1{font-size:var(--t-affiche);max-width:16ch}
+  .ruban .geste{font-size:var(--t-30)}
+  .ruban li{padding:var(--s-24) var(--s-32)}
+  .annee{padding:var(--s-16) var(--s-32)}
+  section{padding:var(--s-96) 0}
+  h2{font-size:var(--t-36)}
+  .entretien .cadre{grid-template-columns:4fr 8fr;gap:var(--s-64);align-items:start}
+  .sav .cadre{display:grid;grid-template-columns:4fr 8fr;gap:var(--s-64)}
+  .sav h2{font-size:var(--t-30)}
+  .construire .cadre{grid-template-columns:5fr 7fr;gap:var(--s-64);align-items:start}
+  .contact .cadre{grid-template-columns:6fr 5fr;gap:var(--s-96)}
+  .pied .cadre{grid-template-columns:4fr 8fr}
+  .barre{display:none}
+}
